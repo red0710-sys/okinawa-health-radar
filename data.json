@@ -13,32 +13,13 @@
     "yaeyama": 25
   },
   "alerts": {
-    "influenza": "warning",
-    "covid": "monitor",
-    "gastro": "monitor",
-    "hfmd": "monitor"
-  },
-  "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html",
-  "covid": {
-    "okinawa": null,
-    "previous": null
-  },
-  "gastro": {
-    "okinawa": null,
-    "previous": null
-  },
-  "hfmd": {
-    "okinawa": null,
-    "previous": null
+    "influenza": "warning"
   },
   "thresholds": {
     "influenza": {
       "caution": 10,
       "warning": 30
-    },
-    "hfmd": {
-      "warning": 5
     }
   },
-  "statusNote": "數值僅在官方資料成功解析後顯示；未解析時顯示資料待同步。"
+  "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html"
 }
