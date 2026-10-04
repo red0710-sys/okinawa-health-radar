@@ -13,11 +13,13 @@ body{background:#f5f1e8;color:#16323b}
 .row{border-bottom:1px solid var(--border)}
 .trend{color:var(--muted)}.warn{color:var(--error)}
 .links a{color:var(--p)}
-</style></head><body><main class="wrap">
+.chartbox{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px}.charthead,.chartlegend{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.chartlegend{margin-top:5px}.chartbox svg{width:100%;height:auto;display:block;margin-top:8px}.chartbox text{font-size:9px;fill:#68777b}.chartbox .gridline{stroke:#d8e2df;stroke-width:1}.chartbox .threshold{stroke:#d94242;stroke-width:1;stroke-dasharray:5 4;opacity:.55}.chartbox .attention{stroke:#d89a2b}.chartbox .series{fill:none;stroke:#087f8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chartbox .point{fill:#087f8c}</style></head><body><main class="wrap">
 <div class="top"><div><div class="eyebrow">D.C · TRAVEL HEALTH</div><div class="title">Okinawa Health Radar</div><div class="sub">沖繩旅行疫情雷達 · 官方週報監測</div></div><div class="badge">🔴 HIGH</div></div>
 <section class="hero"><div class="risk">11月初家庭旅行風險</div><h2>🔴 流感目前高流行</h2><p>沖繩已發布流感警報。現階段不代表需要取消旅行，但建議出發前持續觀察趨勢；幼兒在人多密閉場所提高防護。</p><div class="stamp">官方資料：2026 第39週 · 9/21–9/27</div></section>
 <div class="grid" style="grid-template-columns:1fr">
 <div class="card"><div class="name"><span class="dot red"></span>流感</div><div class="value">42.50</div><div class="unit">人 / 定點 · 全縣</div><div class="trend warn">↑ 警報等級 ≥30</div></div></div>
+<h3 class="section">近半年趨勢 · 全沖繩</h3>
+<div class="chartbox"><div class="charthead"><span>人 / 定點</span><span>近 26 週</span></div><svg id="trendChart" viewBox="0 0 460 190" role="img" aria-label="沖繩流感近半年趨勢"></svg><div class="chartlegend"><span>— 流感</span><span>注意 10</span><span>警報 30</span></div></div>
 <h3 class="section">流感 · 地區雷達</h3><div class="areas">
 <div class="row"><span>沖繩全縣</span><strong>42.50</strong><span class="warn">🔴 警報</span></div>
 <div class="row"><span>那霸</span><strong>60.78</strong><span class="warn">🔴 很高</span></div>
@@ -28,6 +30,9 @@ body{background:#f5f1e8;color:#16323b}
 </main><script>
 fetch('./data.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  const f=d.flu||{}; const vals=document.querySelectorAll('.value');
+ const hist=(d.history||[]).slice(-26),svg=document.getElementById('trendChart');
+ if(svg&&hist.length){const W=460,H=190,L=30,R=8,T=8,B=25,max=Math.max(45,...hist.map(x=>Number(x.value)||0));const x=i=>L+i*(W-L-R)/Math.max(1,hist.length-1),y=v=>T+(max-v)*(H-T-B)/max;let out='';[0,10,20,30,40].filter(v=>v<=max).forEach(v=>{out+='<line class="gridline" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/><text x="2" y="'+(y(v)+3)+'">'+v+'</text>'});[10,30].forEach(v=>{out+='<line class="threshold '+(v===10?'attention':'')+'" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/>'});const pts=hist.map((p,i)=>x(i)+','+y(Number(p.value))).join(' ');out+='<polyline class="series" points="'+pts+'"/>';hist.forEach((p,i)=>{out+='<circle class="point" cx="'+x(i)+'" cy="'+y(Number(p.value))+'" r="'+(i===hist.length-1?4:2)+'"><title>'+p.label+' · '+Number(p.value).toFixed(2)+'</title></circle>';if(i===0||i===hist.length-1||i%5===0)out+='<text text-anchor="middle" x="'+x(i)+'" y="'+(H-5)+'">'+p.label+'</text>'});svg.innerHTML=out;} else if(svg){svg.innerHTML='<text x="230" y="95" text-anchor="middle">歷史資料同步中</text>';}
+
  if(vals[0]&&f.okinawa!=null) vals[0].textContent=Number(f.okinawa).toFixed(2);
  const rows=document.querySelectorAll('.areas .row strong');
  [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{if(rows[i]&&v!=null)rows[i].textContent=Number(v).toFixed(2)});
