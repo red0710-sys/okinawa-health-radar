@@ -72,6 +72,19 @@ for key,thr in [("gastro",20),("hfmd",5)]:
     v=d.get(key,{}).get("okinawa")
     d["alerts"][key]="warning" if v is not None and v>=thr else ("low" if v is not None else "pending")
 d["alerts"]["covid"]="data" if d.get("covid",{}).get("okinawa") is not None else "pending"
+# Maintain an official-only rolling 26-week influenza history. Never interpolate gaps.
+cur=d.get("flu",{}).get("okinawa")
+wk=d.get("week")
+if cur is not None and wk is not None:
+    hist=d.setdefault("history",[])
+    item={"week":int(wk),"label":"W"+str(wk),"value":float(cur)}
+    replaced=False
+    for i,x in enumerate(hist):
+        if x.get("week")==int(wk):
+            hist[i]=item; replaced=True; break
+    if not replaced: hist.append(item)
+    hist.sort(key=lambda x:x.get("week",0))
+    d["history"]=hist[-26:]
 d["lastChecked"]=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
 d["sourceExcel"]=excel_url
 with open("data.json","w",encoding="utf-8") as f:json.dump(d,f,ensure_ascii=False,indent=2)
