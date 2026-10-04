@@ -14,4 +14,15 @@
 <div class="row"><span>北部</span><strong>35.60</strong><span class="warn">🔴 警報</span></div>
 <div class="row"><span>中部</span><strong>25.77</strong><span>🟠 高</span></div></div>
 <div class="foot"><strong>判讀：</strong>流感官方警報基準為每定點 30 人。數據為感染症發生動向調查速報值，可能後續修正。本頁供旅行風險參考，不取代醫療建議。<br><br><span class="links"><a href="https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html">沖繩縣感染症情報中心 ↗</a></span><br>Last data update: 2026-10-02 · D.C</div>
-</main></body></html>
+</main><script>
+fetch('./data.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
+ const f=d.flu||{}; const vals=document.querySelectorAll('.value');
+ if(vals[0]&&f.okinawa!=null) vals[0].textContent=Number(f.okinawa).toFixed(2);
+ const rows=document.querySelectorAll('.areas .row strong');
+ [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{if(rows[i]&&v!=null)rows[i].textContent=Number(v).toFixed(2)});
+ const stamp=document.querySelector('.stamp'); if(stamp) stamp.textContent='官方資料：2026 第'+d.week+'週 · '+d.period;
+ const foot=document.querySelector('.foot'); if(foot) foot.insertAdjacentHTML('beforeend','<br>Auto check: '+d.lastChecked);
+ const badge=document.querySelector('.badge');
+ if(badge){let v=Number(f.okinawa||0);badge.textContent=v>=30?'🔴 HIGH':v>=10?'🟡 WATCH':'🟢 LOW';}
+}).catch(()=>{});
+</script></body></html>
