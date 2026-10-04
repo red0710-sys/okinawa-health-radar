@@ -26,7 +26,7 @@ body{background:#f5f1e8;color:#16323b}
 <div class="row"><span>南部</span><strong>57.17</strong><span class="warn">🔴 很高</span></div>
 <div class="row"><span>北部</span><strong>35.60</strong><span class="warn">🔴 警報</span></div>
 <div class="row"><span>中部</span><strong>25.77</strong><span>🟠 高</span></div></div>
-<div class="foot"><strong>判讀：</strong>流感官方警報基準為每定點 30 人。數據為感染症發生動向調查速報值，可能後續修正。本頁供旅行風險參考，不取代醫療建議。<br><br><span class="links"><a href="https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html">沖繩縣感染症情報中心 ↗</a></span><br>Last data update: 2026-10-02 · D.C</div>
+<div class="foot"><div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:12px"><strong>免責聲明</strong><br>本頁資料整理自沖繩縣官方公開資訊，僅供旅遊健康風險參考。疫情數據可能因通報、統計或官方修正而變動，不構成醫療診斷或醫療建議；如有症狀或健康疑慮，請諮詢專業醫療人員。</div><strong>判讀：</strong>流感官方警報基準為每定點 30 人。數據為感染症發生動向調查速報值，可能後續修正。本頁供旅行風險參考，不取代醫療建議。<br><br><span class="links"><a href="https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html">沖繩縣感染症情報中心 ↗</a></span><br>Last data update: 2026-10-02 · D.C</div>
 </main><script>
 fetch('./data.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  const f=d.flu||{}; const vals=document.querySelectorAll('.value');
