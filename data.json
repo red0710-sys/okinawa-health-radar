@@ -21,5 +21,18 @@
       "warning": 30
     }
   },
-  "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html"
+  "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html",
+  "history": [
+    {
+      "week": 14,
+      "label": "W14",
+      "value": 6.64
+    },
+    {
+      "week": 39,
+      "label": "W39",
+      "value": 42.5
+    }
+  ],
+  "historyMode": "official-only; gaps are not interpolated"
 }
