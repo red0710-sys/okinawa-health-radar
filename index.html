@@ -16,11 +16,8 @@ body{background:#f5f1e8;color:#16323b}
 </style></head><body><main class="wrap">
 <div class="top"><div><div class="eyebrow">D.C · TRAVEL HEALTH</div><div class="title">Okinawa Health Radar</div><div class="sub">沖繩旅行疫情雷達 · 官方週報監測</div></div><div class="badge">🔴 HIGH</div></div>
 <section class="hero"><div class="risk">11月初家庭旅行風險</div><h2>🔴 流感目前高流行</h2><p>沖繩已發布流感警報。現階段不代表需要取消旅行，但建議出發前持續觀察趨勢；幼兒在人多密閉場所提高防護。</p><div class="stamp">官方資料：2026 第39週 · 9/21–9/27</div></section>
-<div class="grid">
-<div class="card"><div class="name"><span class="dot red"></span>流感</div><div class="value">42.50</div><div class="unit">人 / 定點 · 全縣</div><div class="trend warn">↑ 警報等級 ≥30</div></div>
-<div class="card" data-disease="covid"><div class="name"><span class="dot gray"></span>COVID-19</div><div class="value">資料待同步</div><div class="unit">人 / 定點 · 全縣</div><div class="trend">官方週報</div></div>
-<div class="card" data-disease="gastro"><div class="name"><span class="dot gray"></span>感染性腸胃炎</div><div class="value">資料待同步</div><div class="unit">人 / 定點 · 全縣</div><div class="trend">官方週報</div></div>
-<div class="card" data-disease="hfmd"><div class="name"><span class="dot gray"></span>手足口病</div><div class="value">資料待同步</div><div class="unit">人 / 定點 · 全縣</div><div class="trend">幼兒重點監測 · 警報 ≥5</div></div></div>
+<div class="grid" style="grid-template-columns:1fr">
+<div class="card"><div class="name"><span class="dot red"></span>流感</div><div class="value">42.50</div><div class="unit">人 / 定點 · 全縣</div><div class="trend warn">↑ 警報等級 ≥30</div></div></div>
 <h3 class="section">流感 · 地區雷達</h3><div class="areas">
 <div class="row"><span>沖繩全縣</span><strong>42.50</strong><span class="warn">🔴 警報</span></div>
 <div class="row"><span>那霸</span><strong>60.78</strong><span class="warn">🔴 很高</span></div>
@@ -31,7 +28,6 @@ body{background:#f5f1e8;color:#16323b}
 </main><script>
 fetch('./data.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  const f=d.flu||{}; const vals=document.querySelectorAll('.value');
- ['covid','gastro','hfmd'].forEach(k=>{const c=document.querySelector('[data-disease="'+k+'"]');if(!c)return;const x=d[k]||{};const v=c.querySelector('.value'),t=c.querySelector('.trend'),dot=c.querySelector('.dot');if(x.okinawa!=null){v.textContent=Number(x.okinawa).toFixed(2);let wow=x.previous!=null?((x.okinawa-x.previous)/x.previous*100):null;if(wow!=null&&isFinite(wow))t.textContent=(wow>=0?'↑ ':'↓ ')+Math.abs(wow).toFixed(0)+'% vs 上週';if(k==='hfmd'&&x.okinawa>=5){dot.className='dot red';t.textContent='🔴 警報等級 ≥5';}}else{v.textContent='資料待同步';}});
  if(vals[0]&&f.okinawa!=null) vals[0].textContent=Number(f.okinawa).toFixed(2);
  const rows=document.querySelectorAll('.areas .row strong');
  [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{if(rows[i]&&v!=null)rows[i].textContent=Number(v).toFixed(2)});
