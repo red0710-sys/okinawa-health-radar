@@ -3,7 +3,42 @@
   "period": "2026/09/21–09/27",
   "sourceUpdated": "2026-10-02",
   "lastChecked": "2026-10-04",
-  "flu": {"okinawa":42.50,"naha":60.78,"south":57.17,"north":35.60,"central":25.77,"miyako":24.50,"yaeyama":25.00},
-  "alerts": {"influenza":"warning","covid":"monitor","gastro":"monitor","hfmd":"monitor"},
-  "source":"https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html"
+  "flu": {
+    "okinawa": 42.5,
+    "naha": 60.78,
+    "south": 57.17,
+    "north": 35.6,
+    "central": 25.77,
+    "miyako": 24.5,
+    "yaeyama": 25
+  },
+  "alerts": {
+    "influenza": "warning",
+    "covid": "monitor",
+    "gastro": "monitor",
+    "hfmd": "monitor"
+  },
+  "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html",
+  "covid": {
+    "okinawa": null,
+    "previous": null
+  },
+  "gastro": {
+    "okinawa": null,
+    "previous": null
+  },
+  "hfmd": {
+    "okinawa": null,
+    "previous": null
+  },
+  "thresholds": {
+    "influenza": {
+      "caution": 10,
+      "warning": 30
+    },
+    "hfmd": {
+      "warning": 5
+    }
+  },
+  "statusNote": "數值僅在官方資料成功解析後顯示；未解析時顯示資料待同步。"
 }
