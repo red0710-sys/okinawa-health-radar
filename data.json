@@ -29,10 +29,125 @@
       "value": 6.64
     },
     {
+      "week": 15,
+      "label": "W15",
+      "value": 4.36
+    },
+    {
+      "week": 16,
+      "label": "W16",
+      "value": 3.48
+    },
+    {
+      "week": 17,
+      "label": "W17",
+      "value": 3.91
+    },
+    {
+      "week": 18,
+      "label": "W18",
+      "value": 2.77
+    },
+    {
+      "week": 19,
+      "label": "W19",
+      "value": 2.32
+    },
+    {
+      "week": 20,
+      "label": "W20",
+      "value": 2.52
+    },
+    {
+      "week": 21,
+      "label": "W21",
+      "value": 1.57
+    },
+    {
+      "week": 22,
+      "label": "W22",
+      "value": 1.11
+    },
+    {
+      "week": 23,
+      "label": "W23",
+      "value": 0.8
+    },
+    {
+      "week": 24,
+      "label": "W24",
+      "value": 0.77
+    },
+    {
+      "week": 25,
+      "label": "W25",
+      "value": 0.43
+    },
+    {
+      "week": 26,
+      "label": "W26",
+      "value": 0.75
+    },
+    {
+      "week": 27,
+      "label": "W27",
+      "value": 0.55
+    },
+    {
+      "week": 28,
+      "label": "W28",
+      "value": 0.61
+    },
+    {
+      "week": 29,
+      "label": "W29",
+      "value": 0.86
+    },
+    {
+      "week": 30,
+      "label": "W30",
+      "value": 1.82
+    },
+    {
+      "week": 31,
+      "label": "W31",
+      "value": 2.2
+    },
+    {
+      "week": 32,
+      "label": "W32",
+      "value": 2.3
+    },
+    {
+      "week": 33,
+      "label": "W33",
+      "value": 2.89
+    },
+    {
+      "week": 35,
+      "label": "W35",
+      "value": 8.5
+    },
+    {
+      "week": 36,
+      "label": "W36",
+      "value": 10.34
+    },
+    {
+      "week": 37,
+      "label": "W37",
+      "value": 16.61
+    },
+    {
+      "week": 38,
+      "label": "W38",
+      "value": 26.27
+    },
+    {
       "week": 39,
       "label": "W39",
       "value": 42.5
     }
   ],
-  "historyMode": "official-only; gaps are not interpolated"
+  "historyMode": "official-only; W34 omitted pending exact verification; no interpolation"
 }
