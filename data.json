@@ -1,0 +1,9 @@
+{
+  "week": 39,
+  "period": "2026/09/21–09/27",
+  "sourceUpdated": "2026-10-02",
+  "lastChecked": "2026-10-04",
+  "flu": {"okinawa":42.50,"naha":60.78,"south":57.17,"north":35.60,"central":25.77,"miyako":24.50,"yaeyama":25.00},
+  "alerts": {"influenza":"warning","covid":"monitor","gastro":"monitor","hfmd":"monitor"},
+  "source":"https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html"
+}
