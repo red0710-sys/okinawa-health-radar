@@ -26,19 +26,29 @@ body{background:#f5f1e8;color:#16323b}
 <div class="row"><span>南部</span><strong>57.17</strong><span class="warn">🔴 很高</span></div>
 <div class="row"><span>北部</span><strong>35.60</strong><span class="warn">🔴 警報</span></div>
 <div class="row"><span>中部</span><strong>25.77</strong><span>🟠 高</span></div></div>
-<div class="foot"><div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:12px"><strong>免責聲明</strong><br>本頁資料整理自沖繩縣官方公開資訊，僅供旅遊健康風險參考。疫情數據可能因通報、統計或官方修正而變動，不構成醫療診斷或醫療建議；如有症狀或健康疑慮，請諮詢專業醫療人員。</div><strong>判讀：</strong>流感官方警報基準為每定點 30 人。數據為感染症發生動向調查速報值，可能後續修正。本頁供旅行風險參考，不取代醫療建議。<br><br><span class="links"><a href="https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html">沖繩縣感染症情報中心 ↗</a></span><br>Last data update: 2026-10-02 · D.C</div>
+<div class="foot"><div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:12px"><strong>免責聲明</strong><br>本頁資料整理自沖繩縣官方公開資訊，僅供旅遊健康風險參考。疫情數據可能因通報、統計或官方修正而變動，不構成醫療診斷或醫療建議；如有症狀或健康疑慮，請諮詢專業醫療人員。</div><strong>判讀：</strong>流感官方警報基準為每定點 30 人。數據為感染症發生動向調查速報值，可能後續修正。本頁供旅行風險參考，不取代醫療建議。<br><br><span class="links"><a href="https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html">沖繩縣感染症情報中心 ↗</a></span><br>D.C · 資料日期以上方週報為準</div>
 </main><script>
-fetch('./data.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
- const f=d.flu||{}; const vals=document.querySelectorAll('.value');
- const hist=(d.history||[]).slice(-26),svg=document.getElementById('trendChart');
- if(svg&&hist.length){const W=460,H=190,L=30,R=8,T=8,B=25,max=Math.max(45,...hist.map(x=>Number(x.value)||0));const x=i=>L+i*(W-L-R)/Math.max(1,hist.length-1),y=v=>T+(max-v)*(H-T-B)/max;let out='';[0,10,20,30,40].filter(v=>v<=max).forEach(v=>{out+='<line class="gridline" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/><text x="2" y="'+(y(v)+3)+'">'+v+'</text>'});[10,30].forEach(v=>{out+='<line class="threshold '+(v===10?'attention':'')+'" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/>'});const pts=hist.map((p,i)=>x(i)+','+y(Number(p.value))).join(' ');out+='<polyline class="series" points="'+pts+'"/>';hist.forEach((p,i)=>{out+='<circle class="point" cx="'+x(i)+'" cy="'+y(Number(p.value))+'" r="'+(i===hist.length-1?4:2)+'"><title>'+p.label+' · '+Number(p.value).toFixed(2)+'</title></circle>';if(i===0||i===hist.length-1||i%5===0)out+='<text text-anchor="middle" x="'+x(i)+'" y="'+(H-5)+'">'+p.label+'</text>'});svg.innerHTML=out;} else if(svg){svg.innerHTML='<text x="230" y="95" text-anchor="middle">歷史資料同步中</text>';}
-
- if(vals[0]&&f.okinawa!=null) vals[0].textContent=Number(f.okinawa).toFixed(2);
- const rows=document.querySelectorAll('.areas .row strong');
- [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{if(rows[i]&&v!=null)rows[i].textContent=Number(v).toFixed(2)});
- const stamp=document.querySelector('.stamp'); if(stamp) stamp.textContent='官方資料：2026 第'+d.week+'週 · '+d.period;
- const foot=document.querySelector('.foot'); if(foot) foot.insertAdjacentHTML('beforeend','<br>Auto check: '+d.lastChecked);
- const badge=document.querySelector('.badge');
- if(badge){let v=Number(f.okinawa||0);badge.textContent=v>=30?'🔴 HIGH':v>=10?'🟡 WATCH':'🟢 LOW';}
-}).catch(()=>{});
+const number=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0?v:null;
+const level=v=>v===null?['⚪ UNKNOWN','資料不足']:v>=30?['🔴 HIGH','達警報基準']:v>=10?['🟡 WATCH','達注意基準']:['🟢 LOW','低於注意基準'];
+fetch('./data.json?ts='+Date.now()).then(r=>{if(!r.ok)throw Error('data');return r.json()}).then(d=>{
+ const f=d.flu||{},value=number(f.okinawa),year=Number(d.year)||Number(String(d.period).slice(0,4)),status=level(value);
+ document.querySelector('.badge').textContent=status[0];
+ document.querySelector('.hero h2').textContent='流感 · '+status[1];
+ document.querySelector('.hero p').textContent='依本期每定點通報數判讀；這是週報資料，不代表即時感染風險。出發前請再次查閱沖繩縣官方資訊。';
+ document.querySelector('.value').textContent=value===null?'—':value.toFixed(2);
+ document.querySelector('.trend').textContent=status[1]+' · 注意 10 / 警報 30';
+ document.querySelector('.dot').style.background=value===null?'#7b8797':value>=30?'#d94242':value>=10?'#d89a2b':'#2d8a67';
+ const rows=document.querySelectorAll('.areas .row');
+ [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{v=number(v);rows[i].querySelector('strong').textContent=v===null?'—':v.toFixed(2);const label=rows[i].lastElementChild;label.textContent=level(v)[1];label.classList.toggle('warn',v!==null&&v>=30)});
+ document.querySelector('.stamp').textContent='官方資料：'+year+' 第'+d.week+'週 · '+d.period;
+ const info=document.createElement('div');info.textContent='資料檢查：'+(d.lastChecked||'未提供');document.querySelector('.foot').append(info);
+ const date=String(d.lastChecked||'').slice(0,10);if(!Number.isFinite(Date.parse(date))||Date.now()-Date.parse(date)>10*864e5){info.textContent+=' · 資料可能過期，請查閱官方來源';info.className='warn'}
+ const hist=(d.history||[]).filter(p=>Number.isInteger(p.week)&&p.week>=1&&p.week<=53&&number(p.value)!==null).map(p=>({...p,year:p.year||year})).map(p=>({...p,t:isoWeekTime(p.year,p.week)})).filter(p=>Number.isFinite(p.t)).sort((a,b)=>a.t-b.t);
+ const svg=document.getElementById('trendChart'),latest=hist.at(-1)?.t,windowStart=latest-25*7*864e5,series=hist.filter(p=>p.t>=windowStart);
+ if(!series.length){svg.innerHTML='<text x="230" y="95" text-anchor="middle">尚無可用歷史資料</text>';return}
+ const W=460,H=190,L=30,R=8,T=8,B=25,max=Math.max(45,...series.map(p=>p.value)),x=t=>L+(t-windowStart)*(W-L-R)/(25*7*864e5),y=v=>T+(max-v)*(H-T-B)/max;
+ let out='';[0,10,20,30,40].forEach(v=>{out+='<line class="gridline" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/><text x="2" y="'+(y(v)+3)+'">'+v+'</text>'});[10,30].forEach(v=>out+='<line class="threshold '+(v===10?'attention':'')+'" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/>');
+ series.forEach((p,i)=>{const prev=series[i-1];if(prev&&p.t-prev.t===7*864e5)out+='<path class="series" d="M'+x(prev.t)+','+y(prev.value)+' L'+x(p.t)+','+y(p.value)+'"/>';out+='<circle class="point" cx="'+x(p.t)+'" cy="'+y(p.value)+'" r="3"><title>'+p.year+' W'+p.week+' · '+p.value.toFixed(2)+'</title></circle>';if(i===0||i===series.length-1||i%5===0)out+='<text text-anchor="middle" x="'+x(p.t)+'" y="185">W'+p.week+'</text>'});svg.innerHTML=out;
+}).catch(()=>{document.querySelector('.badge').textContent='⚪ 未更新';document.querySelector('.hero h2').textContent='資料載入失敗';document.querySelector('.hero p').textContent='目前無法確認最新數據，請查閱下方官方來源。';document.querySelector('.stamp').textContent='尚未取得資料';document.querySelector('.value').textContent='—';document.querySelector('.trend').textContent='無法判讀';document.querySelectorAll('.areas .row').forEach(r=>{r.querySelector('strong').textContent='—';r.lastElementChild.textContent='未更新'})});
+function isoWeekTime(year,week){const d=new Date(Date.UTC(year,0,4));d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7+(week-1)*7);return d.getTime()}
 </script></body></html>
