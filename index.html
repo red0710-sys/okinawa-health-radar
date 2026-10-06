@@ -13,9 +13,18 @@ body{background:#f5f1e8;color:#16323b}
 .row{border-bottom:1px solid var(--border)}
 .trend{color:var(--muted)}.warn{color:var(--error)}
 .links a{color:var(--p)}
-.chartbox{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px}.charthead,.chartlegend{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.chartlegend{margin-top:5px}.chartbox svg{width:100%;height:auto;display:block;margin-top:8px}.chartbox text{font-size:9px;fill:#68777b}.chartbox .gridline{stroke:#d8e2df;stroke-width:1}.chartbox .threshold{stroke:#d94242;stroke-width:1;stroke-dasharray:5 4;opacity:.55}.chartbox .attention{stroke:#d89a2b}.chartbox .series{fill:none;stroke:#087f8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chartbox .point{fill:#087f8c}</style></head><body><main class="wrap">
-<div class="top"><div><div class="eyebrow">D.C · TRAVEL HEALTH</div><div class="title">Okinawa Health Radar</div><div class="sub">沖繩旅行疫情雷達 · 官方週報監測</div></div><div class="badge">🔴 HIGH</div></div>
-<section class="hero"><div class="risk">11月初家庭旅行風險</div><h2>🔴 流感目前高流行</h2><p>沖繩已發布流感警報。現階段不代表需要取消旅行，但建議出發前持續觀察趨勢；幼兒在人多密閉場所提高防護。</p><div class="stamp">官方資料：2026 第39週 · 9/21–9/27</div></section>
+.chartbox{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px}.charthead,.chartlegend{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.chartlegend{margin-top:5px}.chartbox svg{width:100%;height:auto;display:block;margin-top:8px}.chartbox text{font-size:9px;fill:#68777b}.chartbox .gridline{stroke:#d8e2df;stroke-width:1}.chartbox .threshold{stroke:#d94242;stroke-width:1;stroke-dasharray:5 4;opacity:.55}.chartbox .attention{stroke:#d89a2b}.chartbox .series{fill:none;stroke:#087f8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chartbox .point{fill:#087f8c}
+.topright{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.version{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--p);background:#fffdf8;border:1px solid var(--border);border-radius:99px;padding:5px 8px}
+.updatebox{margin-top:12px;padding:12px 13px;background:#ffffff18;border:1px solid #ffffff2d;border-radius:14px;font-size:12px;line-height:1.55}
+.updatebox .update-title{font-weight:800;margin-bottom:3px}
+.updatebox .update-next{opacity:.88}
+.updatebox .update-check{opacity:.68;font-size:11px;margin-top:3px}
+.updatebox.wait{background:#fff3cd;color:#533b00;border-color:#ffe08a}
+.updatebox.stale{background:#ffe7e7;color:#6b1c1c;border-color:#ffc4c4}
+</style></head><body><main class="wrap">
+<div class="top"><div><div class="eyebrow">D.C · TRAVEL HEALTH</div><div class="title">Okinawa Health Radar</div><div class="sub">沖繩旅行疫情雷達 · 官方週報監測</div></div><div class="topright"><div class="version">V1.1</div><div class="badge">🔴 HIGH</div></div></div>
+<section class="hero"><div class="risk">11月初家庭旅行風險</div><h2>🔴 流感目前高流行</h2><p>沖繩已發布流感警報。現階段不代表需要取消旅行，但建議出發前持續觀察趨勢；幼兒在人多密閉場所提高防護。</p><div class="stamp">官方資料：2026 第39週 · 9/21–9/27</div><div id="updateStatus" class="updatebox"><div class="update-title">資料狀態：讀取中</div><div class="update-next">正在確認官方週報更新時程…</div><div class="update-check"></div></div></section>
 <div class="grid" style="grid-template-columns:1fr">
 <div class="card"><div class="name"><span class="dot red"></span>流感</div><div class="value">42.50</div><div class="unit">人 / 定點 · 全縣</div><div class="trend warn">↑ 警報等級 ≥30</div></div></div>
 <h3 class="section">近半年趨勢 · 全沖繩</h3>
@@ -41,6 +50,28 @@ fetch('./data.json?ts='+Date.now()).then(r=>{if(!r.ok)throw Error('data');return
  const rows=document.querySelectorAll('.areas .row');
  [f.okinawa,f.naha,f.south,f.north,f.central].forEach((v,i)=>{v=number(v);rows[i].querySelector('strong').textContent=v===null?'—':v.toFixed(2);const label=rows[i].lastElementChild;label.textContent=level(v)[1];label.classList.toggle('warn',v!==null&&v>=30)});
  document.querySelector('.stamp').textContent='官方資料：'+year+' 第'+d.week+'週 · '+d.period;
+ const updateBox=document.getElementById('updateStatus'),next=nextOfficialRelease(d.sourceUpdated),now=new Date();
+ const updateTitle=updateBox.querySelector('.update-title'),updateNext=updateBox.querySelector('.update-next'),updateCheck=updateBox.querySelector('.update-check');
+ updateBox.classList.remove('wait','stale');
+ if(next){
+   const lateHours=(now-next)/36e5;
+   if(lateHours<0){
+     updateTitle.textContent='✅ 已同步目前官方最新週報';
+     updateNext.textContent='下一次官方預計更新：'+formatJst(next)+' · 第'+(Number(d.week)+1)+'週';
+   }else if(lateHours<24){
+     updateBox.classList.add('wait');
+     updateTitle.textContent='⏳ 已進入官方更新時段';
+     updateNext.textContent='正在等待沖繩縣新週報；網站會自動再次同步。';
+   }else{
+     updateBox.classList.add('stale');
+     updateTitle.textContent='⚠️ 新週報可能延遲或尚未同步';
+     updateNext.textContent='建議先查看下方沖繩縣官方來源；系統仍會再次嘗試更新。';
+   }
+ }else{
+   updateTitle.textContent='資料狀態：已載入官方週報';
+   updateNext.textContent='下一次更新時間暫無法推算。';
+ }
+ updateCheck.textContent='官方發布：'+(d.sourceUpdated||'未提供')+' · 最近檢查：'+(d.lastChecked||'未提供');
  const info=document.createElement('div');info.textContent='資料檢查：'+(d.lastChecked||'未提供');document.querySelector('.foot').append(info);
  const date=String(d.lastChecked||'').slice(0,10);if(!Number.isFinite(Date.parse(date))||Date.now()-Date.parse(date)>10*864e5){info.textContent+=' · 資料可能過期，請查閱官方來源';info.className='warn'}
  const hist=(d.history||[]).filter(p=>Number.isInteger(p.week)&&p.week>=1&&p.week<=53&&number(p.value)!==null).map(p=>({...p,year:p.year||year})).map(p=>({...p,t:isoWeekTime(p.year,p.week)})).filter(p=>Number.isFinite(p.t)).sort((a,b)=>a.t-b.t);
@@ -50,5 +81,7 @@ fetch('./data.json?ts='+Date.now()).then(r=>{if(!r.ok)throw Error('data');return
  let out='';[0,10,20,30,40].forEach(v=>{out+='<line class="gridline" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/><text x="2" y="'+(y(v)+3)+'">'+v+'</text>'});[10,30].forEach(v=>out+='<line class="threshold '+(v===10?'attention':'')+'" x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'"/>');
  series.forEach((p,i)=>{const prev=series[i-1];if(prev&&p.t-prev.t===7*864e5)out+='<path class="series" d="M'+x(prev.t)+','+y(prev.value)+' L'+x(p.t)+','+y(p.value)+'"/>';out+='<circle class="point" cx="'+x(p.t)+'" cy="'+y(p.value)+'" r="3"><title>'+p.year+' W'+p.week+' · '+p.value.toFixed(2)+'</title></circle>';if(i===0||i===series.length-1||i%5===0)out+='<text text-anchor="middle" x="'+x(p.t)+'" y="185">W'+p.week+'</text>'});svg.innerHTML=out;
 }).catch(()=>{document.querySelector('.badge').textContent='⚪ 未更新';document.querySelector('.hero h2').textContent='資料載入失敗';document.querySelector('.hero p').textContent='目前無法確認最新數據，請查閱下方官方來源。';document.querySelector('.stamp').textContent='尚未取得資料';document.querySelector('.value').textContent='—';document.querySelector('.trend').textContent='無法判讀';document.querySelectorAll('.areas .row').forEach(r=>{r.querySelector('strong').textContent='—';r.lastElementChild.textContent='未更新'})});
+function nextOfficialRelease(sourceDate){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(sourceDate||''));if(!m)return null;return new Date(Date.UTC(+m[1],+m[2]-1,+m[3]+7,2,0,0))}
+function formatJst(date){return new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(date)+' JST'}
 function isoWeekTime(year,week){const d=new Date(Date.UTC(year,0,4));d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7+(week-1)*7);return d.getTime()}
 </script></body></html>
