@@ -23,11 +23,18 @@ def main():
     year,week,period,flu=parse(html)
     with open("data.json",encoding="utf-8") as f: d=json.load(f)
     old_year=d.get("year") or int(str(d["period"])[:4])
+    old_week=int(d.get("week") or 0)
+    if (year,week)<(old_year,old_week):
+        raise ValueError("Official source returned an older week; preserved current data")
+    now_jst=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+    changed_observation=(year,week)!=(old_year,old_week) or flu!=d.get("flu")
     history=[{**p,"year":p.get("year",old_year)} for p in d.get("history",[])]
     history=[p for p in history if (p["year"],p["week"])!=(year,week)]
     history.append({"year":year,"week":week,"label":f"W{week}","value":flu["okinawa"]})
     history.sort(key=lambda p:(p["year"],p["week"]))
-    d.update(year=year,week=week,period=period,flu=flu,history=history[-26:],lastChecked=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).isoformat(timespec="minutes"))
+    d.update(year=year,week=week,period=period,flu=flu,history=history[-26:],lastChecked=now_jst.isoformat(timespec="minutes"))
+    if changed_observation or not d.get("sourceUpdated"):
+        d["sourceUpdated"]=now_jst.date().isoformat()
     d["alerts"]={"influenza":"warning" if flu["okinawa"]>=30 else "caution" if flu["okinawa"]>=10 else "low"}
     with open("data.json.tmp","w",encoding="utf-8") as f:json.dump(d,f,ensure_ascii=False,indent=2)
     os.replace("data.json.tmp","data.json")
