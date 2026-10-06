@@ -1,7 +1,10 @@
 name: Update Okinawa Health Data
 on:
   schedule:
-    - cron: '30 2 * * 5'
+    # Okinawa official weekly report is normally published Friday around 11:00 JST.
+    # Retry later the same day, plus one Saturday fallback, so a delayed release is not missed.
+    - cron: '30 2,5,8 * * 5'
+    - cron: '30 2 * * 6'
   workflow_dispatch:
 permissions:
   contents: write
