@@ -1,14 +1,14 @@
 {
-  "week": 44,
-  "period": "2026年10月26日–2026年11月1日",
-  "sourceUpdated": "2026-11-06",
-  "lastChecked": "2026-11-07T12:15+09:00",
+  "week": 45,
+  "period": "2026年11月2日–2026年11月8日",
+  "sourceUpdated": "2026-11-13",
+  "lastChecked": "2026-11-13T18:47+09:00",
   "flu": {
-    "okinawa": 12.95,
-    "north": null,
-    "central": 18.85,
-    "naha": 10.33,
-    "south": 12.67,
+    "okinawa": 10.52,
+    "north": 10.6,
+    "central": 12.31,
+    "naha": 10.78,
+    "south": null,
     "miyako": null,
     "yaeyama": null
   },
@@ -23,12 +23,6 @@
   },
   "source": "https://www.pref.okinawa.jp/iryokenko/shippeikansensho/1005861/1006484.html",
   "history": [
-    {
-      "week": 18,
-      "label": "W18",
-      "value": 2.77,
-      "year": 2026
-    },
     {
       "week": 19,
       "label": "W19",
@@ -178,6 +172,12 @@
       "week": 44,
       "label": "W44",
       "value": 12.95
+    },
+    {
+      "year": 2026,
+      "week": 45,
+      "label": "W45",
+      "value": 10.52
     }
   ],
   "historyMode": "official-only; W34 omitted pending exact verification; no interpolation",
